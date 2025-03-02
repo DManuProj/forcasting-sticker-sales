@@ -1,70 +1,129 @@
-# Getting Started with Create React App
+# Sticker Sales Forecasting Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a full-stack application for forecasting sticker sales based on historical data from a Kaggle competition. It combines a Flask backend with machine learning models and a React frontend to provide a user-friendly interface for sales predictions.
 
-## Available Scripts
+## Project Structure
 
-In the project directory, you can run:
+```
+sticker-sales-forecaster/
+├── backend/
+│   ├── app.py                  # Flask API server
+│   ├── save_models.py          # Script to train and save models
+│   └── models/                 # Directory for saved models
+│
+├── data/
+│   ├── train.csv               # Training data from Kaggle competition
+│   └── test.csv                # Test data from Kaggle competition
+│
+└── frontend/                   # React application
+    ├── public/
+    ├── src/
+    │   ├── App.js
+    │   ├── components/
+    │   │   ├── ForecastForm.js
+    │   │   └── ForecastResults.js
+    │   └── ...
+    └── ...
+```
 
-### `npm start`
+## Getting Started
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Backend Setup
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Navigate to the backend directory**:
+   ```sh
+   cd backend
+   ```
 
-### `npm test`
+2. **Create a virtual environment** (optional but recommended):
+   ```sh
+   # For Windows
+   python -m venv venv
+   venv\Scripts\activate
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   # For macOS/Linux
+   python -m venv venv
+   source venv/bin/activate
+   ```
 
-### `npm run build`
+3. **Install required packages**:
+   ```sh
+   pip install flask flask-cors pandas numpy scikit-learn lightgbm
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. **Train the machine learning models**:
+   ```sh
+   python save_models.py
+   ```
+   This will:
+   - Load the training data from the data directory
+   - Process and clean the data
+   - Train LightGBM models for each country
+   - Save the models to the models directory
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+5. **Start the Flask server**:
+   ```sh
+   python app.py
+   ```
+   The backend will be available at [http://localhost:5000](http://localhost:5000)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Frontend Setup
 
-### `npm run eject`
+1. **Navigate to the frontend directory**:
+   ```sh
+   cd frontend
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. **Install dependencies**:
+   ```sh
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Start the development server**:
+   ```sh
+   npm start
+   ```
+   The frontend will be available at [http://localhost:3000](http://localhost:3000)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Using the Application
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Select the country, store, and product for which you want to forecast sales
+2. Choose a start date and the number of days to forecast
+3. Click "Generate Forecast" to see the results
+4. View the forecast chart and detailed daily predictions
 
-## Learn More
+## Features
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Country-specific machine learning models for more accurate forecasts
+- Interactive chart visualization of predicted sales
+- Detailed day-by-day forecast table
+- Summary statistics including total and average predicted sales
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Technical Details
 
-### Code Splitting
+### Backend (Python/Flask)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **Machine Learning**: Uses LightGBM for gradient boosting regression models
+- **Data Processing**: Handles missing values, creates time-based features
+- **API**: Provides a RESTful endpoint for forecasting
 
-### Analyzing the Bundle Size
+### Frontend (React)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **UI Components**: Form inputs for forecast parameters
+- **Data Visualization**: Chart.js for graphical representation
+- **Responsive Design**: Adapts to different screen sizes
 
-### Making a Progressive Web App
+## Development Notes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- The models are trained on historical data from specific countries only (Canada, Finland, Italy, Kenya, Norway, Singapore)
+- Time-based features (year, month, day of week, etc.) are used to capture seasonal patterns
+- Each country has its own trained model to better capture market-specific patterns
 
-### Advanced Configuration
+## Troubleshooting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- **Models not found**: Ensure you've run `save_models.py` before starting the Flask server
+- **Data file errors**: Make sure `train.csv` and `test.csv` are in the correct location
+- **Connection issues**: Verify both backend and frontend servers are running
+- **Package errors**: Ensure all required packages are installed
 
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+    
